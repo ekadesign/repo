@@ -62,12 +62,13 @@ class RssFeedSync extends Command {
             );
 
             //save news
-            foreach ($data['items'] as $item) {
+            foreach ($data['items'] as  $key => $item) {
                 if (News::where('link', $item->get_permalink())->first()) {
                     continue;
                 }
                 $res = [
                     'title' => $item->get_title(),
+                    'image' => $item->get_thumbnail(),
                     'link' => $item->get_permalink(),
                     'description' => $item->get_description(),
                     'time' => (int)strtotime($item->get_date()),
