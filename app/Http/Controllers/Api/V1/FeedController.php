@@ -10,6 +10,6 @@ class FeedController extends Controller
 {
     public function index(){
 
-        return response()->json(News::paginate(5));
+        return response()->json(News::orderBy('time', 'desc')->paginate(5));
     }
 }
