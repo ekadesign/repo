@@ -71,13 +71,23 @@ class RssFeedSync extends Command {
                     $tags [] = $category->get_label();
                 }
 
+                //var_dump($item->get_description());
+                //var_dump($feed->get_image_link());
+
+                //trim tags, new lines, etc
+                $descriptionWithOutHtml = trim(preg_replace('/\s+/', ' ', strip_tags($item->get_description())));
+
+                $description = substr($descriptionWithOutHtml, 0, 600);
+
+
                 $res = [
                     'title' => $item->get_title(),
                     'image' => $item->get_thumbnail(),
                     'link' => $item->get_permalink(),
-                    'description' => $item->get_description(),
+                    //if description > 200 symbols trim string and add ... else show full description
+                    'description' => strlen($description) === 600 ? substr($description, 0,strrpos($description, ' ')).'...' : $description,
                     'time' => (int)strtotime($item->get_date()),
-                    'tags' => json_encode($tags),
+                    'tags' => serialize(array_slice($tags, 0, 7)),
                 ];
 
                 News::create($res);

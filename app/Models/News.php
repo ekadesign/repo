@@ -9,4 +9,10 @@ class News extends Model
     protected $table = 'news';
 
     protected $fillable = ['title', 'image', 'description', 'link', 'time', 'tags'];
+
+    public function getTagsAttribute($value){
+
+        return (array)unserialize($value);
+    }
+
 }
