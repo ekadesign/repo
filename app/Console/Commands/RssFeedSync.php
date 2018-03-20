@@ -66,15 +66,22 @@ class RssFeedSync extends Command {
                 if (News::where('link', $item->get_permalink())->first()) {
                     continue;
                 }
+                //get_tags
+                foreach ($item->get_categories() as $category){
+                    $tags [] = $category->get_label();
+                }
+
                 $res = [
                     'title' => $item->get_title(),
                     'image' => $item->get_thumbnail(),
                     'link' => $item->get_permalink(),
                     'description' => $item->get_description(),
                     'time' => (int)strtotime($item->get_date()),
+                    'tags' => json_encode($tags),
                 ];
 
                 News::create($res);
+                $this->info('item created ' . $item->get_title());
             }
         }
     }
