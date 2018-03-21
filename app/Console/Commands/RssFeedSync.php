@@ -63,6 +63,7 @@ class RssFeedSync extends Command {
 
             //save news
             foreach ($data['items'] as  $key => $item) {
+
                 if (News::where('link', $item->get_permalink())->first()) {
                     continue;
                 }
@@ -71,8 +72,18 @@ class RssFeedSync extends Command {
                     $tags [] = $category->get_label();
                 }
 
-                //var_dump($item->get_description());
-                //var_dump($feed->get_image_link());
+                //get images
+                if($item->get_enclosure()){
+                    $img = $item->get_enclosure()->get_link();
+                }
+                if(!$img) {
+                    $dom = new \DOMDocument();
+                    @$dom->loadHTML($item->get_content());
+                    $res = $dom->getElementsByTagName('img')->item(0);
+                    if ($res) {
+                        $img = $res->getAttribute('src');
+                    }
+                }
 
                 //trim tags, new lines, etc
                 $descriptionWithOutHtml = trim(preg_replace('/\s+/', ' ', strip_tags($item->get_description())));
@@ -82,7 +93,7 @@ class RssFeedSync extends Command {
 
                 $res = [
                     'title' => $item->get_title(),
-                    'image' => $item->get_thumbnail(),
+                    'image' => $img ?? null,
                     'link' => $item->get_permalink(),
                     //if description > 200 symbols trim string and add ... else show full description
                     'description' => strlen($description) === 600 ? substr($description, 0,strrpos($description, ' ')).'...' : $description,
@@ -90,8 +101,8 @@ class RssFeedSync extends Command {
                     'tags' => serialize(array_slice($tags, 0, 7)),
                 ];
 
-                News::create($res);
-                $this->info('item created ' . $item->get_title());
+                //News::create($res);
+                //$this->info('item created ' . $item->get_title());
             }
         }
     }
