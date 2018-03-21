@@ -68,6 +68,7 @@ class RssFeedSync extends Command {
                     continue;
                 }
                 //get_tags
+                $tags = [];
                 foreach ($item->get_categories() as $category){
                     $tags [] = $category->get_label();
                 }
