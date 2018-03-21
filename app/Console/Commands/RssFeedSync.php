@@ -101,8 +101,8 @@ class RssFeedSync extends Command {
                     'tags' => serialize(array_slice($tags, 0, 7)),
                 ];
 
-                //News::create($res);
-                //$this->info('item created ' . $item->get_title());
+                News::create($res);
+                $this->info('item created ' . $item->get_title());
             }
         }
     }
