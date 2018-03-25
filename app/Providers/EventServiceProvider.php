@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Forum\Topic;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -28,5 +30,8 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         //
+        Topic::creating(function ($topic){
+            $topic->user_id = Auth::user()->id;
+        });
     }
 }

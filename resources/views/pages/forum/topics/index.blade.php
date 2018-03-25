@@ -17,7 +17,7 @@
         @foreach($topics as $topic)
             <tr>
                 <td>{{$topic->name}}</td>
-                <td>{{$topic->author}}</td>
+                <td>{{$topic->user->name ?? ''}}</td>
                 <td>{{$topic->human_tags}}</td>
                 <td>{{$topic->views}}</td>
                 <td>{{$topic->category->name}}</td>

@@ -24,7 +24,11 @@ class Topic extends Model
     }
 
     public function getHumanTagsAttribute() {
-        return implode(', ', unserialize($this->attributes['tags']));
+        return implode(', ', (array)unserialize($this->attributes['tags']));
+    }
+
+    public function getTagsAttribute($value) {
+        return (array)unserialize($value);
     }
 
     public function setTagsAttribute($value){

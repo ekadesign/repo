@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <a class="btn btn-info float-right" href="{{route('feed.create')}}">Create</a>
+        <a class="btn btn-info float-right" href="{{route('categories.create')}}">Create</a>
         <table class="table">
             <thead>
             <th>name</th>

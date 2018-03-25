@@ -8,8 +8,6 @@
             <div class="form-group">
                 <label for="formGroupExampleInput">name</label>
                 <input type="text" class="form-control" name="name" value="{{ $topic->name}}" placeholder="Pls insert name of topic">
-                <label for="formGroupExampleInput">author</label>
-                <input type="text" class="form-control" name="author" value="{{ $topic->author}}" placeholder="Pls insert author of topic">
                 <label for="formGroupExampleInput">tags</label>
                 <input type="text" class="form-control" name="tags" value="{{ $topic->human_tags}}" placeholder="Pls insert tags of topic">
                 <label for="formGroupExampleInput">text</label>
