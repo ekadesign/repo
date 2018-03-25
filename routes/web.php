@@ -19,5 +19,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-Route::resource('feed', 'FeedController');
+Route::prefix('admin')->group(function () {
+    Route::get('/', function (){
+        return view('pages.dashboard');
+    })->name('dashboard');
+    Route::prefix('forum')->group(function () {
+        Route::resource('categories', 'Forum\CategoryController');
+        Route::resource('topics', 'Forum\TopicController');
+    });
+    Route::resource('feed', 'FeedController');
+});

@@ -21,5 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::namespace('Api\V1')->group(function (){
     Route::prefix('v1')->group(function (){
         Route::get('feed', 'FeedController@index');
+        Route::get('forum', 'ForumController@index');
+        Route::get('forum/category/{id}', 'ForumController@getTopicsByCategoryId');
+        Route::get('forum/topic/{id}', 'ForumController@getMessagesByTopicId');
+        Route::post('forum/reply', 'ForumController@reply');
     });
 });
