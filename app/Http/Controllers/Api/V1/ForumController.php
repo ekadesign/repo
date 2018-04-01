@@ -21,7 +21,7 @@ class ForumController extends Controller {
     }
 
     public function getTopicByTopicName($name) {
-        return response()->json(Topic::where('symbol', $name)->first()->with('user', 'messages')->first());
+        return response()->json(Topic::where('symbol', strtoupper($name))->with('user')->first());
     }
 
     public function getMessagesByTopicId($id) {

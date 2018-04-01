@@ -22,7 +22,7 @@ class Message extends Model
     }
 
     public function replys(){
-        return $this->hasMany(Message::class, 'parent_id')->with('user');
+        return $this->hasMany(Message::class, 'parent_id')->where('topic_id', $this->topic->id)->with('user');
     }
 
     public function getReplysAttribute(){
