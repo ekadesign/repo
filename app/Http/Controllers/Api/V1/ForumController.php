@@ -28,6 +28,14 @@ class ForumController extends Controller {
         return response()->json(Topic::find($id)->messages()->with('user')->paginate(15));
     }
 
+    public function getHotTopics(Request $request){
+        $topics = (new Topic())->newQuery();
+        $collection = $topics->get()->sortByDesc(function ($topic) {
+            return count($topic->messages);
+        });
+        return response()->json($collection->take(5));
+    }
+
     public function getAllTopics(Request $request) {
         $topics = (new Topic())->newQuery();
 
@@ -44,6 +52,8 @@ class ForumController extends Controller {
                         return count($topic->messages);
                     });
                     break;
+                default:
+                    $collection = $topics->get();
             }
         }
 
