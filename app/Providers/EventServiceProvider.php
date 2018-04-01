@@ -31,7 +31,7 @@ class EventServiceProvider extends ServiceProvider
 
         //
         Topic::creating(function ($topic){
-            $topic->user_id = Auth::user()->id;
+            //$topic->user_id = Auth::user()->id;
         });
     }
 }
