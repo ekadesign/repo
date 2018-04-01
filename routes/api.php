@@ -22,7 +22,11 @@ Route::namespace('Api\V1')->group(function (){
     Route::prefix('v1')->group(function (){
         Route::get('feed', 'FeedController@index');
         Route::get('forum', 'ForumController@index');
-        Route::get('forum/category/{id}', 'ForumController@getTopicsByCategoryId');
+        Route::get('forum/category/{name}', 'ForumController@getTopicsByCategoryName');
+        Route::get('forum/category/cryptos/{name}', 'ForumController@getTopicByTopicName');
+        Route::get('forum/categories', 'ForumController@getAllCategories');
+        Route::get('forum/topics', 'ForumController@getAllTopics');
+        Route::get('forum/topics/hot', 'ForumController@getHotTopics');
         Route::get('forum/topic/{id}', 'ForumController@getMessagesByTopicId');
         Route::post('forum/reply', 'ForumController@reply');
     });

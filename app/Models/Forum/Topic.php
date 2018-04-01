@@ -10,7 +10,7 @@ class Topic extends Model
 
     protected $table = 'forum_topics';
 
-    protected $fillable = [ 'name', 'tags', 'views', 'text', 'category_id', 'user_id'];
+    protected $fillable = [ 'name', 'symbol', 'tags', 'views', 'text', 'category_id', 'user_id'];
 
     protected $hidden = ['user_id'];
 

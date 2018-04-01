@@ -7,6 +7,7 @@
         <table class="table">
             <thead>
             <th>name</th>
+            <th>symbol</th>
             <th>author</th>
             <th>tags</th>
             <th>views</th>
@@ -17,6 +18,7 @@
         @foreach($topics as $topic)
             <tr>
                 <td>{{$topic->name}}</td>
+                <td>{{$topic->symbol}}</td>
                 <td>{{$topic->user->name ?? ''}}</td>
                 <td>{{$topic->human_tags}}</td>
                 <td>{{$topic->views}}</td>

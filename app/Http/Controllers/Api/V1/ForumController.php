@@ -7,23 +7,62 @@ use App\Models\Forum\Message;
 use App\Models\Forum\Topic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
-class ForumController extends Controller
-{
-    public function index (){
+class ForumController extends Controller {
+    public function index() {
         return response()->json(Category::paginate(5));
     }
 
-    public function getTopicsByCategoryId($id){
-        return response()->json(Category::find($id)->topics()->paginate(5));
+    public function getTopicsByCategoryName($name) {
+        return response()->json(Category::where('name', $name)->first()->topics()->paginate(5));
     }
 
-    public function getMessagesByTopicId($id){
+    public function getTopicByTopicName($name) {
+        return response()->json(Topic::where('symbol', $name)->first()->messages()->with('user')->first());
+    }
+
+    public function getMessagesByTopicId($id) {
         return response()->json(Topic::find($id)->messages()->with('user')->paginate(15));
     }
 
-    public function reply(Request $request){
+    public function getAllTopics(Request $request) {
+        $topics = (new Topic())->newQuery();
+
+        if ($request->has('sort')) {
+            switch ($request->input('sort')) {
+                case 'newest' :
+                    $collection = $topics->get()->sortByDesc('updated_at');
+                    break;
+                case 'oldest' :
+                    $collection = $topics->get()->sortBy('updated_at');
+                    break;
+                case 'top' :
+                    $collection = $topics->get()->sortByDesc(function ($topic) {
+                        return count($topic->messages);
+                    });
+                    break;
+            }
+        }
+
+        return response()->json($this->paginate($collection, 5));
+    }
+
+    public function getAllCategories() {
+        return response()->json(Category::paginate(5));
+    }
+
+    public function reply(Request $request) {
         Message::create($request->all());
         return response()->json(['success' => true], 200);
     }
+
+    public function paginate($items, $perPage = 15, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
 }
+
