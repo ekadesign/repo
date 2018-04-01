@@ -21,7 +21,7 @@ class ForumController extends Controller {
     }
 
     public function getTopicByTopicName($name) {
-        return response()->json(Topic::where('symbol', $name)->first()->with('user', 'messages')->first());
+        return response()->json(Topic::where('symbol', strtoupper($name))->with('user')->first());
     }
 
     public function getMessagesByTopicId($id) {
@@ -33,7 +33,7 @@ class ForumController extends Controller {
         $collection = $topics->get()->sortByDesc(function ($topic) {
             return count($topic->messages);
         });
-        return response()->json($collection->take(5));
+        return response()->json($collection->take(5)->values()->toArray());
     }
 
     public function getAllTopics(Request $request) {
@@ -55,7 +55,7 @@ class ForumController extends Controller {
                 $collection = Topic::all();
         }
 
-        return response()->json($this->paginate($collection, 5));
+        return response()->json($this->paginate($collection->values()->toArray(), 5));
     }
 
     public function getAllCategories() {

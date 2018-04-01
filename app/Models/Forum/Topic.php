@@ -14,7 +14,6 @@ class Topic extends Model
 
     protected $hidden = ['user_id'];
 
-
     public function category(){
         return $this->belongsTo(Category::class);
     }
@@ -29,6 +28,10 @@ class Topic extends Model
 
     public function getTagsAttribute($value) {
         return (array)unserialize($value);
+    }
+
+    public function getMessagesCountAttribute(){
+        return $this->messages()->count();
     }
 
     public function setTagsAttribute($value){
