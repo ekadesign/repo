@@ -21,7 +21,7 @@ class ForumController extends Controller {
     }
 
     public function getTopicByTopicName($name) {
-        return response()->json(Topic::where('symbol', $name)->first()->messages()->with('user')->first());
+        return response()->json(Topic::where('symbol', $name)->first()->with('user', 'messages')->first());
     }
 
     public function getMessagesByTopicId($id) {
@@ -39,22 +39,20 @@ class ForumController extends Controller {
     public function getAllTopics(Request $request) {
         $topics = (new Topic())->newQuery();
 
-        if ($request->has('sort')) {
-            switch ($request->input('sort')) {
-                case 'newest' :
-                    $collection = $topics->get()->sortByDesc('updated_at');
-                    break;
-                case 'oldest' :
-                    $collection = $topics->get()->sortBy('updated_at');
-                    break;
-                case 'top' :
-                    $collection = $topics->get()->sortByDesc(function ($topic) {
-                        return count($topic->messages);
-                    });
-                    break;
-                default:
-                    $collection = $topics->get();
-            }
+        switch ($request->input('sort')) {
+            case 'newest' :
+                $collection = $topics->get()->sortByDesc('updated_at');
+                break;
+            case 'oldest' :
+                $collection = $topics->get()->sortBy('updated_at');
+                break;
+            case 'top' :
+                $collection = $topics->get()->sortByDesc(function ($topic) {
+                    return count($topic->messages);
+                });
+                break;
+            default:
+                $collection = Topic::all();
         }
 
         return response()->json($this->paginate($collection, 5));
