@@ -52,8 +52,11 @@ class ForumController extends Controller {
                 });
                 break;
             default:
-                $collection = Topic::all();
+                $collection = Topic::get();
         }
+
+        var_dump($collection instanceof Collection);
+
 
         return response()->json($this->paginate($collection->values()->toArray(), 5));
     }
@@ -70,7 +73,7 @@ class ForumController extends Controller {
     public function paginate($items, $perPage = 15, $page = null, $options = []) {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return new LengthAwarePaginator($items->forPage($page, $perPage)->values(), $items->count(), $perPage, $page, $options);
     }
 }
 
