@@ -55,8 +55,6 @@ class ForumController extends Controller {
                 $collection = Topic::get();
         }
 
-        var_dump($collection instanceof Collection);
-
 
         return response()->json($this->paginate($collection->values()->toArray(), 5));
     }
