@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,28 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::namespace('Api\V1')->group(function (){
     Route::prefix('v1')->group(function (){
+        Route::get('proxy', function(Request $request){
+
+            $client = new Client();
+
+            $url = 'https://api.coinmarketcap.com/v1/global';
+
+            $result = null;
+
+            $queryString = $url;
+
+            if($request->getQueryString()){
+                $queryString .= '?' . $request->getQueryString();
+            }
+
+            $response = $client->get($queryString);
+
+            if($response){
+            $result = json_decode($response->getBody()->getContents());
+            }
+
+            return response()->json($result);
+        });
         Route::get('feed', 'FeedController@index');
         Route::get('forum', 'ForumController@index');
         Route::get('forum/category/{name}', 'ForumController@getTopicsByCategoryName');
