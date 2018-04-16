@@ -25,7 +25,7 @@ class TopicResource extends JsonResource
             'category_id' => $this->category_id,
             'user' => $this->user,
             'last_reply_date' => $this->messages()->latest()->first()->created_at,
-            'last_reply_name' => $this->messages()->latest()->first()->user()->name,
+            'last_reply_name' => $this->messages()->latest()->first()->user()->first()->name,
         ];
     }
 }
