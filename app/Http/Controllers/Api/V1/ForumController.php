@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\TopicResource;
 use App\Models\Forum\Category;
 use App\Models\Forum\Message;
@@ -23,11 +24,10 @@ class ForumController extends Controller {
     // category/cryptos {xmr}
     public function getTopicByTopicName($name) {
         return TopicResource::collection(Topic::where('symbol', strtoupper($name))->get());
-        //return response()->json(Topic::where('symbol', strtoupper($name))->with('user')->first());
     }
-
+    // topic/18
     public function getMessagesByTopicId($id) {
-        return response()->json(Topic::find($id)->messages()->with('user')->paginate(15));
+        return new MessageResource(Topic::find($id)->messages()->with('user')->first());
     }
 
     public function getHotTopics(Request $request){

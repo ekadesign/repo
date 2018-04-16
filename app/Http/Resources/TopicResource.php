@@ -17,13 +17,15 @@ class TopicResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'description' => $this->description,
             'symbol' => $this->symbol,
             'tags' => $this->tags,
             'views' => $this->views,
             'text' => $this->text,
             'category_id' => $this->category_id,
             'user' => $this->user,
-            'last_reply' => $this->messages()->latest()->first(),
+            'last_reply_date' => $this->messages()->latest()->first()->created_at,
+            'last_reply_name' => $this->messages()->latest()->first()->user()->name,
         ];
     }
 }
