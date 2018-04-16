@@ -16,8 +16,12 @@ class MessageResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'topic' => Topic::find($this->topic_id),
-            'messages' => Topic::find($this->topic_id)->messages()->with('user')->get(),
+            Topic::find($this->topic_id)->messages()->with('user')->get(),
+            [
+                'topic' => Topic::find($this->topic_id),
+                'last_reply_date' => Topic::find($this->topic_id)->messages()->latest()->first()->created_at,
+                'last_reply_name' => Topic::find($this->topic_id)->messages()->latest()->first()->user()->first()->name,
+            ]
         ];
     }
 }
