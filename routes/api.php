@@ -14,8 +14,12 @@ use GuzzleHttp\Client;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::namespace('Api\V1')->group(function () {
+        Route::prefix('v1')->group(function () {
+            Route::post('forum/reply', 'ForumController@reply');
+        });
+    });
 });
 
 
@@ -51,6 +55,5 @@ Route::namespace('Api\V1')->group(function (){
         Route::get('forum/topics', 'ForumController@getAllTopics');
         Route::get('forum/topics/hot', 'ForumController@getHotTopics');
         Route::get('forum/topic/{id}', 'ForumController@getMessagesByTopicId');
-        Route::post('forum/reply', 'ForumController@reply');
     });
 });

@@ -28,10 +28,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
-        Topic::creating(function ($topic){
-            //$topic->user_id = Auth::user()->id;
-        });
     }
 }

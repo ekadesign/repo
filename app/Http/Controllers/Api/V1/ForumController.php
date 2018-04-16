@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\TopicResource;
 use App\Models\Forum\Category;
 use App\Models\Forum\Message;
 use App\Models\Forum\Topic;
@@ -15,13 +16,14 @@ class ForumController extends Controller {
     public function index() {
         return response()->json(Category::paginate(5));
     }
-
+    // category {cryptos}
     public function getTopicsByCategoryName($name) {
         return response()->json(Category::where('name', $name)->first()->topics()->paginate(5));
     }
-
+    // category/cryptos {xmr}
     public function getTopicByTopicName($name) {
-        return response()->json(Topic::where('symbol', strtoupper($name))->with('user')->first());
+        return TopicResource::collection(Topic::where('symbol', strtoupper($name))->get());
+        //return response()->json(Topic::where('symbol', strtoupper($name))->with('user')->first());
     }
 
     public function getMessagesByTopicId($id) {
@@ -55,8 +57,7 @@ class ForumController extends Controller {
                 $collection = Topic::get();
         }
 
-
-        return response()->json($this->paginate($collection->values()->toArray(), 5));
+        return TopicResource::collection($this->paginate($collection->values(), 5));
     }
 
     public function getAllCategories() {
@@ -64,8 +65,15 @@ class ForumController extends Controller {
     }
 
     public function reply(Request $request) {
-        Message::create($request->all());
-        return response()->json(['success' => true], 200);
+        $input = [
+            'text' => $request->input('text'),
+            'parent_id' => $request->input('parent_id'),
+            'topic_id' => $request->input('topic_id'),
+            'user_id' => 1,
+            //'user_id' => (User::where('token', $request->input('token')))->id,
+        ];
+            Message::create($input);
+            return response()->json(['success' => true], 200);
     }
 
     public function paginate($items, $perPage = 15, $page = null, $options = []) {
