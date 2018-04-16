@@ -18,6 +18,8 @@ class MessageResource extends JsonResource
         return [
             'topic' => Topic::find($this->topic_id),
             'messages' => Topic::find($this->topic_id)->messages()->with('user')->get(),
+            'last_reply_date' => Topic::find($this->topic_id)->messages()->latest()->first()->created_at,
+            'last_reply_name' => Topic::find($this->topic_id)->messages()->latest()->first()->user()->name,
         ];
     }
 }
