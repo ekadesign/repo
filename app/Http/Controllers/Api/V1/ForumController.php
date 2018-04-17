@@ -27,7 +27,8 @@ class ForumController extends Controller {
     }
     // topic/18
     public function getMessagesByTopicId($id) {
-        return Topic::find($id)->messages()->count() ? (Topic::find($id))->messages()->get()->prepend([new MessageResource(Topic::find($id))]) : [new MessageResource(Topic::find($id))];
+        $collection = Topic::find($id)->messages()->get();
+        return Topic::find($id)->messages()->count() ? $this->paginateWithPrepend($collection, $id) : [new MessageResource(Topic::find($id))];
     }
 
     public function getHotTopics(Request $request){
@@ -79,14 +80,20 @@ class ForumController extends Controller {
             'user_id' => 1,
             //'user_id' => (User::where('token', $request->input('token')))->id,
         ];
-            Message::create($input);
-            return response()->json(['success' => true], 200);
+        Message::create($input);
+        return response()->json(['success' => true], 200);
     }
 
     public function paginate($items, $perPage = 15, $page = null, $options = []) {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage)->values(), $items->count(), $perPage, $page, $options);
+    }
+
+    public function paginateWithPrepend($items, $topicId, $perPage = 15, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage)->values()->prepend([new MessageResource(Topic::find($topicId))]), $items->count(), $perPage, $page, $options);
     }
 }
 
