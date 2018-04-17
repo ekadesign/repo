@@ -28,7 +28,7 @@ class ForumController extends Controller {
     // topic/18
     public function getMessagesByTopicId($id) {
         $collection = Topic::find($id)->messages()->get();
-        return Topic::find($id)->messages()->count() ? $this->paginateWithPrepend($collection, $id) : [new MessageResource(Topic::find($id))];
+        return $this->paginateWithPrepend($collection, $id);
     }
 
     public function getHotTopics(Request $request){
