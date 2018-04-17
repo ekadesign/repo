@@ -17,8 +17,8 @@ class MessageResource extends JsonResource
     {
         return [
             'topic' => Topic::find($this->id),
-            'last_reply_date' => Topic::find($this->id)->messages()->latest()->first()->created_at,
-            'last_reply_name' => Topic::find($this->id)->messages()->latest()->first()->user()->first()->name,
+            'last_reply_date' => Topic::find($this->id)->messages()->count() ? Topic::find($this->id)->messages()->latest()->first()->created_at : null,
+            'last_reply_name' => Topic::find($this->id)->messages()->count() ? Topic::find($this->id)->messages()->latest()->first()->user()->first()->name : null,
         ];
     }
 }

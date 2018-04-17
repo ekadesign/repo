@@ -23,7 +23,7 @@ class ForumController extends Controller {
     }
     // category/cryptos {xmr}
     public function getTopicByTopicName($name) {
-        return new TopicResource(Topic::where('symbol', strtoupper($name))->first());
+        return [new TopicResource(Topic::where('symbol', strtoupper($name))->first())];
     }
     // topic/18
     public function getMessagesByTopicId($id) {
@@ -57,7 +57,14 @@ class ForumController extends Controller {
                 $collection = Topic::get();
         }
 
-        return TopicResource::collection($this->paginate($collection->values(), 5));
+        $collection->map(function ($item) {
+            $item->last_reply_date =  $item->messages()->count() ? $item->messages()->latest()->first()->created_at : null;
+            $item->last_reply_name = $item->messages()->count() ? $item->messages()->latest()->first()->user()->first()->name : null;
+            return $item;
+        });
+
+        return response()->json($this->paginate($collection->values()->toArray(), 5));
+        //return TopicResource::collection($this->paginate($collection->values(), 5));
     }
 
     public function getAllCategories() {
