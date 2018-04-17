@@ -23,7 +23,7 @@ class ForumController extends Controller {
     }
     // category/cryptos {xmr}
     public function getTopicByTopicName($name) {
-        return [new TopicResource(Topic::where('symbol', strtoupper($name))->first())];
+        return new TopicResource(Topic::where('symbol', strtoupper($name))->first());
     }
     // topic/18
     public function getMessagesByTopicId($id) {
