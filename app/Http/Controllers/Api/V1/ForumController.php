@@ -27,7 +27,7 @@ class ForumController extends Controller {
     }
     // topic/18
     public function getMessagesByTopicId($id) {
-        return (Topic::find($id))->messages()->get()->prepend([new MessageResource(Topic::find($id))]);
+        return Topic::find($id)->messages()->count() ? (Topic::find($id))->messages()->get()->prepend([new MessageResource(Topic::find($id))]) : [new MessageResource(Topic::find($id))];
     }
 
     public function getHotTopics(Request $request){
