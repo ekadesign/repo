@@ -69,7 +69,7 @@ return array(
     |
     */
      'api_identifier'  => 'https://ekacryptosite.herokuapp.com/api',
-     'valid_audiences'  => [env('AUTH0_CLIENT_ID')],
+     'valid_audiences'  => [env('AUTH0_CLIENT_ID'), 'https://ekacryptosite.herokuapp.com/api', 'https://ekadesign.auth0.com/userinfo'],
 
     /*
     |--------------------------------------------------------------------------
