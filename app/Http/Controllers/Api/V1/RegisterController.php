@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
