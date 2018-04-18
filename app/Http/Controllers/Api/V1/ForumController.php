@@ -7,6 +7,8 @@ use App\Http\Resources\TopicResource;
 use App\Models\Forum\Category;
 use App\Models\Forum\Message;
 use App\Models\Forum\Topic;
+use App\Repositories\UserRepository;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -73,12 +75,17 @@ class ForumController extends Controller {
     }
 
     public function reply(Request $request) {
+
+        $jwt = mb_substr($request->header('Authorization'), 7);
+
+        $user = (new UserRepository())->getUserByDecodedJWT($jwt);
+
+
         $input = [
             'text' => $request->input('text'),
             'parent_id' => $request->input('parent_id'),
             'topic_id' => $request->input('topic_id'),
-            'user_id' => 1,
-            //'user_id' => (User::where('token', $request->input('token')))->id,
+            'user_id' => $user->id,
         ];
         Message::create($input);
         return response()->json(['success' => true], 200);

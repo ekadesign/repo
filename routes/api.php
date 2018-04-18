@@ -14,17 +14,10 @@ use GuzzleHttp\Client;
 |
 */
 
-Route::middleware('auth:api')->group(function () {
-    Route::namespace('Api\V1')->group(function () {
-        Route::prefix('v1')->group(function () {
-            Route::post('forum/reply', 'ForumController@reply');
-        });
-    });
-});
-
-
 Route::namespace('Api\V1')->group(function (){
     Route::prefix('v1')->group(function (){
+        Route::post('register', 'RegisterController@register');
+        Route::post('forum/reply', 'ForumController@reply')->middleware('jwt');;
         Route::get('proxy', function(Request $request){
 
             $client = new Client();
