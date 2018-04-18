@@ -29,7 +29,7 @@ class ForumController extends Controller {
     }
     // topic/18
     public function getMessagesByTopicId($id) {
-        $collection = Topic::find($id)->messages()->with('user')->get();
+        $collection = Topic::find($id)->messages()->where('parent_id', 0)->with('user')->get();
         return $this->paginateWithPrepend($collection, $id);
     }
 
